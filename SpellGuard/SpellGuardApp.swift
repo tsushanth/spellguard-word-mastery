@@ -2,11 +2,12 @@
 //  SpellGuardApp.swift
 //  SpellGuard
 //
-//  Main app entry point with SwiftData, StoreKit 2, and SDK integrations
+//  Main app entry point with SwiftData, PaywallKit, and SDK integrations
 //
 
 import SwiftUI
 import SwiftData
+import PaywallKit
 
 @main
 struct SpellGuardApp: App {
@@ -14,7 +15,6 @@ struct SpellGuardApp: App {
 
     let modelContainer: ModelContainer
     @State private var appState = AppStateManager()
-    @State private var premiumManager = PremiumManager()
 
     init() {
         do {
@@ -31,18 +31,20 @@ struct SpellGuardApp: App {
         } catch {
             fatalError("Failed to create ModelContainer: \(error)")
         }
+
+        // Configure PaywallKit StoreManager
+        PremiumManager.shared.configure()
     }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(appState)
-                .environment(premiumManager)
+                .environment(PremiumManager.shared)
                 .onAppear {
-                    // Seed word database
                     WordDatabase.shared.seedWordsIfNeeded(modelContext: modelContainer.mainContext)
                     Task {
-                        await premiumManager.refreshPremiumStatus()
+                        await PremiumManager.shared.refreshPremiumStatus()
                     }
                 }
         }
@@ -63,11 +65,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         Task { @MainActor in
             AnalyticsService.shared.initialize()
             AnalyticsService.shared.track(.appOpen)
-        }
-
-        Task { @MainActor in
-            _ = await ATTService.shared.requestIfNeeded()
-            await AttributionManager.shared.requestAttributionIfNeeded()
         }
 
         return true

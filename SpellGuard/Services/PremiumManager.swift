@@ -2,53 +2,44 @@
 //  PremiumManager.swift
 //  SpellGuard
 //
-//  Premium status management with RevenueCat placeholder
+//  Premium status management via PaywallKit StoreManager
 //
 
 import Foundation
 import StoreKit
+import PaywallKit
+
+// MARK: - Product Identifiers
+enum ProductID {
+    static let weekly = "com.appfactory.spellguard.subscription.weekly"
+    static let monthly = "com.appfactory.spellguard.subscription.monthly"
+    static let yearly = "com.appfactory.spellguard.subscription.yearly"
+    static let lifetime = "com.appfactory.spellguard.premium.lifetime"
+
+    static var allIDs: [String] {
+        [weekly, monthly, yearly, lifetime]
+    }
+}
 
 // MARK: - Premium Manager
 @MainActor
 @Observable
 final class PremiumManager {
-    private(set) var isPremium: Bool = false
-    private(set) var isLoading: Bool = false
-    private let userDefaults = UserDefaults.standard
-    private let premiumKey = "com.appfactory.spellguard.isPremium"
+    static let shared = PremiumManager()
 
-    // RevenueCat placeholder key
-    private let revenueCatAPIKey = "appl_PLACEHOLDER_KEY"
+    private let store = StoreManager.shared
 
-    init() {
-        isPremium = userDefaults.bool(forKey: premiumKey)
+    var isPremium: Bool { store.isPremium }
+    var isLifetime: Bool { store.isLifetime }
+
+    private init() {}
+
+    func configure() {
+        store.configure(productIds: ProductID.allIDs)
     }
 
-    // MARK: - Refresh Status
     func refreshPremiumStatus() async {
-        isLoading = true
-        // TODO: Purchases.shared.getCustomerInfo { customerInfo, error in ... }
-        // For now, rely on StoreKit directly
-        await checkStoreKitEntitlements()
-        isLoading = false
-    }
-
-    private func checkStoreKitEntitlements() async {
-        var hasPremium = false
-        for await result in Transaction.currentEntitlements {
-            if case .verified(let transaction) = result {
-                if transaction.revocationDate == nil {
-                    hasPremium = true
-                    break
-                }
-            }
-        }
-        setPremiumStatus(hasPremium)
-    }
-
-    func setPremiumStatus(_ premium: Bool) {
-        isPremium = premium
-        userDefaults.set(premium, forKey: premiumKey)
+        await store.refreshSubscriptionStatus()
     }
 
     // MARK: - Grade Level Access
