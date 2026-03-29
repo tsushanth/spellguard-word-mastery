@@ -216,6 +216,9 @@
 				Base,
 			);
 			mainGroup = ROOT;
+			packageReferences = (
+				PKGREF1 /* PaywallKit */,
+			);
 			productRefGroup = GRPPROD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -230,8 +233,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/tsushanth/PaywallKit.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				branch = main;
+				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

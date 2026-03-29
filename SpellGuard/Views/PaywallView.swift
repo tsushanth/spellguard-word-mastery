@@ -2,11 +2,10 @@
 //  PaywallView.swift
 //  SpellGuard
 //
-//  Premium paywall using PaywallKit StoreManager
+//  Premium paywall using PaywallKit
 //
 
 import SwiftUI
-import StoreKit
 import PaywallKit
 
 // MARK: - Paywall View
@@ -14,10 +13,14 @@ struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var storeManager = AppStoreKitManager()
-    @State private var selectedProduct: Product?
+    @State private var selectedProductId: String?
     @State private var showingAlert = false
     @State private var alertMessage = ""
     @State private var isPurchasing = false
+
+    private var allProducts: [PaywallProduct] {
+        storeManager.subscriptions + storeManager.nonConsumables
+    }
 
     var body: some View {
         NavigationStack {
@@ -26,7 +29,7 @@ struct PaywallView: View {
                     headerSection
                     featuresSection
 
-                    if storeManager.products.isEmpty {
+                    if allProducts.isEmpty {
                         ProgressView("Loading...")
                             .padding()
                     } else {
@@ -112,26 +115,25 @@ struct PaywallView: View {
         VStack(spacing: 10) {
             ForEach(storeManager.subscriptions, id: \.id) { pw in
                 ProductCard(
-                    product: pw.product,
-                    isSelected: selectedProduct?.id == pw.product.id,
-                    onSelect: { selectedProduct = pw.product }
+                    paywallProduct: pw,
+                    isSelected: selectedProductId == pw.id,
+                    onSelect: { selectedProductId = pw.id }
                 )
             }
 
             ForEach(storeManager.nonConsumables, id: \.id) { pw in
                 ProductCard(
-                    product: pw.product,
-                    isSelected: selectedProduct?.id == pw.product.id,
-                    onSelect: { selectedProduct = pw.product }
+                    paywallProduct: pw,
+                    isSelected: selectedProductId == pw.id,
+                    onSelect: { selectedProductId = pw.id }
                 )
             }
         }
         .padding(.horizontal)
         .onAppear {
-            if selectedProduct == nil {
-                selectedProduct = storeManager.subscriptions.first {
-                    $0.product.subscription?.subscriptionPeriod.unit == .year
-                }?.product ?? storeManager.subscriptions.last?.product
+            if selectedProductId == nil {
+                selectedProductId = storeManager.subscriptions.first { $0.period == .yearly }?.id
+                    ?? storeManager.subscriptions.last?.id
             }
         }
     }
@@ -140,8 +142,8 @@ struct PaywallView: View {
     private var purchaseButton: some View {
         VStack(spacing: 12) {
             Button {
-                guard let product = selectedProduct else { return }
-                Task { await purchaseProduct(product) }
+                guard let productId = selectedProductId else { return }
+                Task { await purchaseProduct(productId) }
             } label: {
                 HStack {
                     if isPurchasing {
@@ -161,10 +163,12 @@ struct PaywallView: View {
                 )
                 .clipShape(RoundedRectangle(cornerRadius: 14))
             }
-            .disabled(selectedProduct == nil || isPurchasing)
+            .disabled(selectedProductId == nil || isPurchasing)
             .padding(.horizontal)
 
-            if selectedProduct?.subscription != nil {
+            if let id = selectedProductId,
+               let product = allProducts.first(where: { $0.id == id }),
+               product.period != .lifetime {
                 Text("Auto-renews. Cancel anytime.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -197,19 +201,22 @@ struct PaywallView: View {
     }
 
     // MARK: - Purchase
-    private func purchaseProduct(_ product: Product) async {
+    private func purchaseProduct(_ productId: String) async {
         isPurchasing = true
-        do {
-            try await storeManager.purchase(product)
+        await storeManager.purchase(productId)
+        switch storeManager.purchaseState {
+        case .purchased:
             await PremiumManager.shared.refreshPremiumStatus()
-            AnalyticsService.shared.track(.subscriptionStarted(product.id))
+            AnalyticsService.shared.track(.subscriptionStarted(productId))
             dismiss()
-        } catch {
-            if storeManager.purchaseState != .cancelled {
-                alertMessage = error.localizedDescription
-                showingAlert = true
-                AnalyticsService.shared.track(.subscriptionFailed(error.localizedDescription))
-            }
+        case .failed(let msg):
+            alertMessage = msg
+            showingAlert = true
+            AnalyticsService.shared.track(.subscriptionFailed(msg))
+        case .cancelled:
+            break
+        default:
+            break
         }
         isPurchasing = false
     }
@@ -268,19 +275,37 @@ struct FeatureRow: View {
 
 // MARK: - Product Card
 struct ProductCard: View {
-    let product: Product
+    let paywallProduct: PaywallProduct
     let isSelected: Bool
     let onSelect: () -> Void
+
+    private var periodLabel: String {
+        switch paywallProduct.period {
+        case .weekly: return "per week"
+        case .monthly: return "per month"
+        case .yearly: return "per year"
+        case .lifetime: return "One-time purchase"
+        }
+    }
+
+    private var displayName: String {
+        switch paywallProduct.period {
+        case .weekly: return "Weekly"
+        case .monthly: return "Monthly"
+        case .yearly: return "Yearly"
+        case .lifetime: return "Lifetime"
+        }
+    }
 
     var body: some View {
         Button(action: onSelect) {
             HStack {
                 VStack(alignment: .leading, spacing: 3) {
                     HStack {
-                        Text(product.displayName)
+                        Text(displayName)
                             .font(.subheadline)
                             .fontWeight(.semibold)
-                        if product.subscription?.subscriptionPeriod.unit == .year {
+                        if paywallProduct.period == .yearly {
                             Text("Best Value - Save 60%")
                                 .font(.caption2)
                                 .foregroundStyle(.white)
@@ -290,14 +315,14 @@ struct ProductCard: View {
                                 .clipShape(Capsule())
                         }
                     }
-                    Text(product.subscription != nil ? product.subscription!.subscriptionPeriod.debugDescription : "One-time purchase")
+                    Text(periodLabel)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
 
                 Spacer()
 
-                Text(product.displayPrice)
+                Text(paywallProduct.localizedPrice)
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundStyle(isSelected ? .blue : .primary)
