@@ -2,16 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>com.apple.developer.in-app-payments</key>
-	<array>
-		<string>com.appfactory.spellguard.subscription.weekly</string>
-		<string>com.appfactory.spellguard.subscription.monthly</string>
-		<string>com.appfactory.spellguard.subscription.yearly</string>
-		<string>com.appfactory.spellguard.premium.lifetime</string>
-	</array>
 	<key>com.apple.security.app-sandbox</key>
 	<false/>
-	<key>aps-environment</key>
-	<string>development</string>
 </dict>
 </plist>

@@ -34,7 +34,6 @@
 		A025 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F025 /* PaywallView.swift */; };
 		A026 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026 /* OnboardingView.swift */; };
 		A027 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F027 /* SettingsView.swift */; };
-		A028 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F028 /* Info.plist */; };
 		A029 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F029 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -72,23 +71,17 @@
 		PROD /* SpellGuard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpellGuard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFrameworksBuildPhase section */
+		FRAMEWORKS /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
 /* Begin PBXGroup section */
-		ROOT = {
-			isa = PBXGroup;
-			children = (
-				GRPAPP /* SpellGuard */,
-				GRPPROD /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		GRPPROD /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				PROD /* SpellGuard.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		GRPAPP /* SpellGuard */ = {
 			isa = PBXGroup;
 			children = (
@@ -115,6 +108,14 @@
 				F007 /* GradeLevel.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		GRPPROD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				PROD /* SpellGuard.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		GRPSERVICES /* Services */ = {
@@ -156,6 +157,14 @@
 				F027 /* SettingsView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		ROOT = {
+			isa = PBXGroup;
+			children = (
+				GRPAPP /* SpellGuard */,
+				GRPPROD /* Products */,
+			);
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -258,16 +267,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		FRAMEWORKS /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
 		DEBUGCONF /* Debug */ = {
@@ -396,6 +395,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 7RS696YC75;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = SpellGuard/Info.plist;
@@ -422,6 +422,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 7RS696YC75;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = SpellGuard/Info.plist;
@@ -442,15 +443,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		PROJBUILDCONFLIST /* Build configuration list for PBXProject "SpellGuard" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DEBUGCONF /* Debug */,
-				RELEASECONF /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		BUILDCONFLIST /* Build configuration list for PBXNativeTarget "SpellGuard" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -460,8 +452,16 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		PROJBUILDCONFLIST /* Build configuration list for PBXProject "SpellGuard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DEBUGCONF /* Debug */,
+				RELEASECONF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
-
 	};
 	rootObject = PROJECT /* Project object */;
 }
