@@ -31,12 +31,6 @@ final class LeaderboardViewModel {
         )
         var fetched = (try? modelContext.fetch(descriptor)) ?? []
 
-        // If no entries, seed mock data
-        if fetched.isEmpty {
-            seedMockLeaderboard(modelContext: modelContext)
-            fetched = (try? modelContext.fetch(descriptor)) ?? []
-        }
-
         // Assign ranks
         for (index, entry) in fetched.enumerated() {
             entry.rank = index + 1
@@ -68,33 +62,6 @@ final class LeaderboardViewModel {
         Array(entries.prefix(10))
     }
 
-    // MARK: - Mock Data
-    private func seedMockLeaderboard(modelContext: ModelContext) {
-        let mockUsers: [(String, Int, String)] = [
-            ("SpellChamp", 9800, "🏆"),
-            ("WordWizard", 9450, "🧙"),
-            ("LexiMaster", 9200, "📚"),
-            ("SpellingBee", 8950, "🐝"),
-            ("VocabKing", 8700, "👑"),
-            ("LetterPro", 8500, "✍️"),
-            ("GrammarGuru", 8200, "📝"),
-            ("AlphaChamp", 7900, "🌟"),
-            ("WordSmith", 7650, "⚒️"),
-            ("SpellStar", 7400, "⭐")
-        ]
-
-        for (index, (name, score, _)) in mockUsers.enumerated() {
-            let entry = LeaderboardEntry(
-                username: name,
-                score: score,
-                gradeLevel: .grade3,
-                rank: index + 1,
-                streak: Int.random(in: 1...30)
-            )
-            modelContext.insert(entry)
-        }
-        try? modelContext.save()
-    }
 }
 
 // MARK: - Leaderboard Period

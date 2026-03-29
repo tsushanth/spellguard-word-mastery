@@ -27,19 +27,28 @@ struct LeaderboardView: View {
                 .pickerStyle(.segmented)
                 .padding()
 
-                ScrollView {
-                    VStack(spacing: 12) {
-                        // Top 3 podium
-                        if viewModel.entries.count >= 3 {
-                            podiumView
-                        }
+                if viewModel.entries.isEmpty {
+                    ContentUnavailableView(
+                        "No Scores Yet",
+                        systemImage: "trophy",
+                        description: Text("Complete spelling challenges to see your scores here.")
+                    )
+                    .frame(maxHeight: .infinity)
+                } else {
+                    ScrollView {
+                        VStack(spacing: 12) {
+                            // Top 3 podium
+                            if viewModel.entries.count >= 3 {
+                                podiumView
+                            }
 
-                        // Full list
-                        ForEach(viewModel.entries.dropFirst(3).prefix(20)) { entry in
-                            LeaderboardRowView(entry: entry)
+                            // Full list
+                            ForEach(viewModel.entries.dropFirst(min(3, viewModel.entries.count)).prefix(20)) { entry in
+                                LeaderboardRowView(entry: entry)
+                            }
                         }
+                        .padding()
                     }
-                    .padding()
                 }
             }
             .background(Color(.systemGroupedBackground))
