@@ -69,6 +69,7 @@
 		F028 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F030 /* SpellGuard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SpellGuard.entitlements; sourceTree = "<group>"; };
 		F031 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F032 /* SpellGuard.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = SpellGuard.storekit; sourceTree = "<group>"; };
 		PROD /* SpellGuard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpellGuard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -92,6 +93,7 @@
 				F028 /* Info.plist */,
 				F030 /* SpellGuard.entitlements */,
 				F031 /* Assets.xcassets */,
+				F032 /* SpellGuard.storekit */,
 				GRPMODELS /* Models */,
 				GRPSERVICES /* Services */,
 				GRPVIEWMODELS /* ViewModels */,
@@ -420,7 +422,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SpellGuard/SpellGuard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 7RS696YC75;
 				ENABLE_PREVIEWS = YES;
@@ -447,7 +449,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SpellGuard/SpellGuard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 7RS696YC75;
 				ENABLE_PREVIEWS = YES;

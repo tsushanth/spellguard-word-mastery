@@ -11,7 +11,6 @@ import PaywallKit
 // MARK: - Paywall View
 struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
-
     @State private var storeManager = AppStoreKitManager()
     @State private var selectedProductId: String?
     @State private var showingAlert = false
@@ -187,15 +186,13 @@ struct PaywallView: View {
 
             Text("·").foregroundStyle(.secondary)
 
-            Button("Terms") {}
-            .font(.caption)
-            .foregroundStyle(.blue)
+            Link("Terms", destination: URL(string: "https://kreativekoala.llc/terms")!)
+                .font(.caption)
 
             Text("·").foregroundStyle(.secondary)
 
-            Button("Privacy") {}
-            .font(.caption)
-            .foregroundStyle(.blue)
+            Link("Privacy", destination: URL(string: "https://kreativekoala.llc/privacy")!)
+                .font(.caption)
         }
         .padding(.bottom)
     }

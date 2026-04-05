@@ -119,11 +119,11 @@ struct SettingsView: View {
                     LabeledContent("Version", value: appVersion)
                     LabeledContent("Build", value: appBuild)
 
-                    Link(destination: URL(string: "https://appfactory.dev/spellguard/privacy")!) {
+                    Link(destination: URL(string: "https://kreativekoala.llc/privacy")!) {
                         Label("Privacy Policy", systemImage: "lock.shield")
                     }
 
-                    Link(destination: URL(string: "https://appfactory.dev/spellguard/terms")!) {
+                    Link(destination: URL(string: "https://kreativekoala.llc/terms")!) {
                         Label("Terms of Service", systemImage: "doc.text")
                     }
 

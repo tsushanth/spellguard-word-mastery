@@ -1,0 +1,15 @@
+{
+  "originHash" : "692b8ddd4848afeec53965d84f97894fa1ac311c63a6367f1f0170b10b9c7e70",
+  "pins" : [
+    {
+      "identity" : "paywallkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tsushanth/PaywallKit.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "746b551c1afa36ea79fbe7380cd8a0cb06811246"
+      }
+    }
+  ],
+  "version" : 3
+}
